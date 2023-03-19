@@ -21,7 +21,8 @@ class User:
         return self.__str__()
 
     def __str__(self):
-        return (
-                    '{' + self.username + ', ' + self.password + ', ' + self.emailAddress + ', ' + self.cardInfo + '}')
+        return ('{' + self.username + ', ' + self.password + ', ' + self.emailAddress + ', ' + self.cardInfo + '}')
 
 
+    def fileFormat(self):
+        return (self.username + ' , ' + self.password + ' , ' + self.emailAddress + ' , ' + self.cardInfo)

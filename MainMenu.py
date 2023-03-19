@@ -2,7 +2,6 @@ import Ticket
 import User
 import pygame
 import pygame_gui
-import random
 
 class MainMenu:
 
@@ -374,8 +373,7 @@ class MainMenu:
                     self.errorMessage = "Username Taken"
                     return
 
-        tempCardNumber = ''.join([random.choice('0123456789') for n in range(16)])  #generates a random credit card number, might change this to let user input this themselves, but probably not worth the effort
-        self.usersFile.write("\n" + username + " , " + password + " , " + username + "@gmail.com" + " , " + tempCardNumber)
+        self.usersFile.write("\n" + username + " , " + password + " , " + username + "@gmail.com" + " , " + "xxxx xxxx xxxx xxxx")
         self.usersFile.close()
         self.usersFile = open("users.txt", 'a+')
 
@@ -411,11 +409,24 @@ class MainMenu:
             self.filteredTickets = self.allTickets #if button is pressed again, resets the tickets
 
     def confirmCreditCard(self):
-        pass
+        if (not self.creditCardInput.get_text().isnumeric()) or len(self.creditCardInput.get_text()) != 16:
+            self.errorMessage = "Enter a Valid Card"
+            self.creditCardInput.clear()
+            return
+
+        self.currentUser.cardInfo = self.creditCardInput.get_text()
+        self.updateUsersFile()
+        self.creditCardInput.clear()
 
     def loadMoney(self):
         if not self.loadMoneyInput.get_text().isnumeric():
             self.errorMessage = "Enter a Number"
+            self.loadMoneyInput.clear()
+            return
+
+        if self.currentUser.cardInfo == "xxxx xxxx xxxx xxxx":
+            self.errorMessage = "No Payment Method"
+            self.loadMoneyInput.clear()
             return
 
         self.currentUser.balance += int(self.loadMoneyInput.get_text())
@@ -423,6 +434,7 @@ class MainMenu:
 
 
     def readUsersFile(self):  #reads users file for checking login, balance, and other important information
+        self.allUsers.clear()
         self.usersFile.seek(0)
         for user in self.usersFile:
             userString = user.split(',')
@@ -447,6 +459,18 @@ class MainMenu:
             price = int(ticketString[5].strip())
             self.allTickets.append(Ticket.Ticket(seller, artist, date, time, location, price))
 
+
+    def updateUsersFile(self):
+
+        self.usersFile.truncate(0)
+        for user in self.allUsers:
+            if self.allUsers.index(user) == 0:
+                self.usersFile.write(user.fileFormat())
+            else:
+                self.usersFile.write("\n" + user.fileFormat())
+
+        self.usersFile.close()
+        self.usersFile = open("users.txt", 'a+')
 
     def drawError(self, window):   #call this whenever an error occurs to create an error pop up with with self.errorMessage
         self.creditCardInput.visible = False
