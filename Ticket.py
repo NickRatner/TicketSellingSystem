@@ -20,3 +20,6 @@ class Ticket:
 
    def __str__(self):
        return ('{' + self.seller + ', ' + self.artist + ', ' + self.date + ', ' + self.time + ', ' + self.location + ', ' + str(self.price) + '}')
+
+   def fileFormat(self):
+       return (self.seller + ' , ' + self.artist + ' , ' + self.date + ' , ' + self.time + ' , ' + self.location + ' , ' + str(self.price))

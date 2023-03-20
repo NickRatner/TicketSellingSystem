@@ -11,6 +11,7 @@ class MainMenu:
         self.filteredTickets = []
         self.currentUser = None
         self.selectedTicket = None
+        self.isSellingTicket = False
         self.mode = "LOGIN"  #this variable will keep track of the current mode, and update the display accordingly.
         # starts off as "LOGIN", and can also hold values of "MAINMENU" or "ACCOUNT"
         self.errorMessage = None #when are error window is created, it will display this error message
@@ -33,9 +34,11 @@ class MainMenu:
         self.passwordInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300, 200), (200, 35)), manager=manager, object_id="#passwordInput")
         self.creditCardInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((250, 150), (200, 35)), manager=manager, object_id="#creditCardInput")
         self.loadMoneyInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((250, 225), (200, 35)), manager=manager, object_id="#loadMoneyInput")
+        self.sellTicketInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((250, 200), (300, 35)), manager=manager, object_id="#sellTicketInput")
 
         self.creditCardInput.visible = False
         self.loadMoneyInput.visible = False
+        self.sellTicketInput.visible = False
 
         size = (700, 500)
         screen = pygame.display.set_mode(size)
@@ -93,7 +96,7 @@ class MainMenu:
         pygame.draw.rect(window, (215, 215, 225), (0, 0, 700, 100))    #draws upper background
         pygame.draw.rect(window, (165, 215, 255), (0, 100, 700, 400))  #draws lower background
 
-        pygame.draw.rect(window, (100, 150, 200), (100, 25, 75, 50), 250, 3)  #draws "add to cart" button
+        pygame.draw.rect(window, (100, 150, 200), (100, 25, 75, 50), 250, 3)  #draws "buy ticket" button
         pygame.draw.rect(window, (100, 150, 200), (200, 25, 75, 50), 250, 3)  #draws "sell ticket" button
 
         pygame.draw.rect(window, (100, 150, 200), (425, 25, 75, 50), 250, 3)  # draws "filter by price" button
@@ -104,25 +107,25 @@ class MainMenu:
         font = pygame.font.Font('freesansbold.ttf', 10)
         slightlyBiggerFont = pygame.font.Font('freesansbold.ttf', 11)
 
-        addToCartText = font.render("Add to Cart", True,(255, 255, 255))  # all the following code is for the text
+        buyTicketText = font.render("Buy Ticket", True,(255, 255, 255))  # all the following code is for the text
         sellTicketText = font.render("Sell Ticket", True, (255, 255, 255))
         filterByPriceText = font.render("Filter by Price", True, (255, 255, 255))
         filterByArtistText = font.render("Filter by Artist", True, (255, 255, 255))
         accountText = font.render("Account", True, (255, 255, 255))
 
-        addToCartTextRect = addToCartText.get_rect()
+        buyTicketTextRect = buyTicketText.get_rect()
         sellTicketTextRect = sellTicketText.get_rect()
         filterByPriceTextRect = filterByPriceText.get_rect()
         filterByArtistTextRect = filterByArtistText.get_rect()
         accountTextRect = accountText.get_rect()
 
-        addToCartTextRect.center = (137.5, 50)
+        buyTicketTextRect.center = (137.5, 50)
         sellTicketTextRect.center = (237.5, 50)
         filterByPriceTextRect.center = (462.5, 50)
         filterByArtistTextRect.center = (562.5, 50)
         accountTextRect.center = (350, 50)
 
-        window.blit(addToCartText, addToCartTextRect)
+        window.blit(buyTicketText, buyTicketTextRect)
         window.blit(sellTicketText, sellTicketTextRect)
         window.blit(filterByPriceText, filterByPriceTextRect)
         window.blit(filterByArtistText, filterByArtistTextRect)
@@ -147,6 +150,9 @@ class MainMenu:
 
         if self.errorMessage != None:
             self.drawError(window)
+
+        if self.isSellingTicket:
+            self.drawSellTicketWindow(window)
 
 
     def drawLoginWindow(self, window):   #login window visuals go here
@@ -211,7 +217,7 @@ class MainMenu:
         mainMenuText = font.render("Main Menu", True, (255, 255, 255))
         creditCardText = font.render("Credit Card:", True, (255, 255, 255))
         loadMoneyText = font.render("Load Money:", True, (255, 255, 255))
-        cartText = font.render("Cart:", True, (255, 255, 255))
+        myTicketsText = font.render("My Tickets:", True, (255, 255, 255))
         creditCardButtonText = font.render("Confirm", True, (255, 255, 255))
         loadMoneyButtonText = font.render("Load Money", True, (255, 255, 255))
         balanceText = font.render("Balance:", True, (255, 255, 255))
@@ -220,7 +226,7 @@ class MainMenu:
         mainMenuTexttRect = mainMenuText.get_rect()
         creditCardTextRect = creditCardText.get_rect()
         loadMoneyTextRect = loadMoneyText.get_rect()
-        cartTextRect = cartText.get_rect()
+        myTicketsTextRect = myTicketsText.get_rect()
         creditCardButtonTextRect = creditCardButtonText.get_rect()
         loadMoneyButtonTextRect = loadMoneyButtonText.get_rect()
         balanceTextRect = balanceText.get_rect()
@@ -229,7 +235,7 @@ class MainMenu:
         mainMenuTexttRect.center = (350, 50)
         creditCardTextRect.center = (205, 165)
         loadMoneyTextRect.center = (205, 240)
-        cartTextRect.center = (205, 285)
+        myTicketsTextRect.center = (205, 285)
         creditCardButtonTextRect.center = (497.5, 167.5)
         loadMoneyButtonTextRect.center = (497.5, 242.5)
         balanceTextRect.center = (325, 115)
@@ -238,7 +244,7 @@ class MainMenu:
         window.blit(mainMenuText, mainMenuTexttRect)
         window.blit(creditCardText, creditCardTextRect)
         window.blit(loadMoneyText, loadMoneyTextRect)
-        window.blit(cartText, cartTextRect)
+        window.blit(myTicketsText, myTicketsTextRect)
         window.blit(creditCardButtonText, creditCardButtonTextRect)
         window.blit(loadMoneyButtonText, loadMoneyButtonTextRect)
         window.blit(balanceText, balanceTextRect)
@@ -282,31 +288,37 @@ class MainMenu:
 
 
         elif self.mode == "MAINMENU":
-            if x > 100 and x < 175 and y > 25 and y < 75 and allGood: #Add to Cart button pressed
-                self.addToCart()
-            if x > 200 and x < 275 and y > 25 and y < 75 and allGood: #Sell Ticket button pressed
+            if x > 100 and x < 175 and y > 25 and y < 75 and allGood and (not self.isSellingTicket): #Buy ticket button pressed
+                self.buyTicket()
+            if x > 200 and x < 275 and y > 25 and y < 75 and allGood and (not self.isSellingTicket): #Sell Ticket button pressed
                 self.sellTicket()
-            if x > 425 and x < 500 and y > 25 and y < 75 and allGood: #Filter by Price button pressed
+            if x > 425 and x < 500 and y > 25 and y < 75 and allGood and (not self.isSellingTicket): #Filter by Price button pressed
                 self.filterByPrice()
-            if x > 525 and x < 600 and y > 25 and y < 75 and allGood: #Filter by Artist button pressed
+            if x > 525 and x < 600 and y > 25 and y < 75 and allGood and (not self.isSellingTicket): #Filter by Artist button pressed
                 self.filterByArtist()
-            if x > 312.5 and x < 387.5 and y > 25 and y < 75 and allGood: #Account button pressed
+            if x > 312.5 and x < 387.5 and y > 25 and y < 75 and allGood and (not self.isSellingTicket): #Account button pressed
                 self.selectedTicket = None
                 self.mode = "ACCOUNT"
 
-            if (not allGood) and x > 275 and x < 425 and y > 280 and y < 330:
+            if self.isSellingTicket and x > 275 and x < 425 and y > 280 and y < 330:   #if sellTicket's window confirm button is pressed
+                self.sellTicketInput.visible = False
+                self.isSellingTicket = False
+                self.confirmTicketSale()
+
+            if (not allGood) and x > 275 and x < 425 and y > 280 and y < 330:   #if error window's exit button is pressed
                 self.errorMessage = None
 
             #check if a ticket is selected
-            ticketx = 100
-            tickety = 125
-            for i in range(len(self.filteredTickets)):
-                if x > ticketx and x < (ticketx + 500) and y > tickety and y < (tickety + 35):
-                    if self.selectedTicket == None or self.selectedTicket != self.filteredTickets[i]:
-                        self.selectedTicket = self.filteredTickets[i]   #sets the selected ticket to the chosen ticket
-                    else:
-                        self.selectedTicket = None #however, if a ticket is selected, unselects it
-                tickety += 70
+            if allGood and (not self.isSellingTicket):
+                ticketx = 100
+                tickety = 125
+                for i in range(len(self.filteredTickets)):
+                    if x > ticketx and x < (ticketx + 500) and y > tickety and y < (tickety + 35):
+                        if self.selectedTicket == None or self.selectedTicket != self.filteredTickets[i]:
+                            self.selectedTicket = self.filteredTickets[i]   #sets the selected ticket to the chosen ticket
+                        else:
+                            self.selectedTicket = None #however, if a ticket is selected, unselects it
+                    tickety += 70
 
 
         elif self.mode == "ACCOUNT":
@@ -325,9 +337,6 @@ class MainMenu:
 
 
     def login(self, username, password):  #called when the login button is pressed
-        #print("Login Attempt!")
-        #print("Username: " + username)
-        #print("Password: " + password)
 
         self.usernameInput.clear()
         self.passwordInput.clear()
@@ -348,15 +357,8 @@ class MainMenu:
         self.errorMessage = "Invalid Username/Password"
         return
 
-        #if valid username + password, sets self.mode = "MAINMENU"  and sets self.currentUser to the username
-        #else, set self.errerMessage = "some error message" and call self.error() function
-
 
     def createAccount(self, username, password):  #called when the create account button is pressed
-        #print("Account Create Attempted!")  #this can use the same text fields as logging in, but will instead create a new account with that username + password
-              #should then clear the username + login field, and allow the user to login
-        #print("Username: " + username)
-        #print("Password: " + password)
 
         self.usernameInput.clear()
         self.passwordInput.clear()
@@ -379,7 +381,7 @@ class MainMenu:
 
         self.readUsersFile()
 
-    def addToCart(self):
+    def buyTicket(self):
         if self.selectedTicket == None:
             self.errorMessage = "Select a Ticket"
             return
@@ -394,19 +396,68 @@ class MainMenu:
         self.selectedTicket = None
 
     def sellTicket(self):
-        print("Sell Ticket Button Pressed")
+        self.isSellingTicket = True
+        self.selectedTicket = None
+
+
+    def confirmTicketSale(self):
+
+        ticketString = self.sellTicketInput.get_text().split(',')
+
+        if (len(ticketString) != 6) or (not ticketString[5].isnumeric()):
+            self.errorMessage = "Invalid Ticket"
+            self.sellTicketInput.clear()
+            self.selectedTicket = None
+            return
+
+        seller = ticketString[0]
+        artist = ticketString[1]
+        date = ticketString[2]
+        time = ticketString[3]
+        location = ticketString[4]
+        price = ticketString[5]
+
+        ticket = Ticket.Ticket(seller, artist, date, time, location, int(price))
+
+        self.allTickets.append(ticket)
+
+        self.updateTicketsFile()
+
 
     def filterByPrice(self):
-        print("Filter by Price Button Pressed")
 
-        if self.filteredTickets != self.allTickets:
-            self.filteredTickets = self.allTickets #if button is pressed again, resets the tickets
+        priceList = []
+        newOrderList = []
+        for ticket in self.allTickets:
+            priceList.append((ticket.price, ticket.date, ticket.time))
+
+        priceList.sort()
+        for price in priceList:
+            for ticket in self.allTickets:
+                if price[0] == ticket.price and price[1] == ticket.date and price[2] == ticket.time:
+                    newOrderList.append(ticket)
+                    break
+
+        self.filteredTickets = newOrderList
+
 
     def filterByArtist(self):
-        print("Filter by Artist Button Pressed")
 
-        if self.filteredTickets != self.allTickets:
-            self.filteredTickets = self.allTickets #if button is pressed again, resets the tickets
+        artistList = []
+        newOrderList = []
+        for ticket in self.allTickets:
+            artistList.append((ticket.artist, ticket.date, ticket.time))
+
+        artistList.sort()
+        for artist in artistList:
+            for ticket in self.allTickets:
+                if artist[0] == ticket.artist and artist[1] == ticket.date and artist[2] == ticket.time:
+                    newOrderList.append(ticket)
+                    break
+
+        self.filteredTickets = newOrderList
+
+
 
     def confirmCreditCard(self):
         if (not self.creditCardInput.get_text().isnumeric()) or len(self.creditCardInput.get_text()) != 16:
@@ -471,6 +522,43 @@ class MainMenu:
 
         self.usersFile.close()
         self.usersFile = open("users.txt", 'a+')
+
+    def updateTicketsFile(self):
+
+        self.ticketsFile.truncate(0)
+        for ticket in self.allTickets:
+            if self.allTickets.index(ticket) == 0:
+                self.ticketsFile.write(ticket.fileFormat())
+            else:
+                self.ticketsFile.write("\n" + ticket.fileFormat())
+
+        self.usersFile.close()
+        self.usersFile = open("users.txt", 'a+')
+
+
+    def drawSellTicketWindow(self, window):   #calls this when a user wants to sell a ticket
+        self.creditCardInput.visible = False
+        self.loadMoneyInput.visible = False
+        self.sellTicketInput.visible = True
+
+        pygame.draw.rect(window, (0, 204, 102), (100, 110, 500, 290))  # draws background
+
+        pygame.draw.rect(window, (0, 0, 255), (275, 280, 150, 50))  # draws confirm button
+
+        font = pygame.font.Font('freesansbold.ttf', 15)
+
+        ticketInfoText = font.render("Ticket Info:", True, (255, 255, 255))
+        confirmText = font.render("Confirm", True, (255, 255, 255))
+
+        ticketInfoTextRect = ticketInfoText.get_rect()
+        confirmTextRect = confirmText.get_rect()
+
+        ticketInfoTextRect.center = (200, 215)
+        confirmTextRect.center = (350, 305)
+
+        window.blit(ticketInfoText, ticketInfoTextRect)
+        window.blit(confirmText, confirmTextRect)
+
 
     def drawError(self, window):   #call this whenever an error occurs to create an error pop up with with self.errorMessage
         self.creditCardInput.visible = False

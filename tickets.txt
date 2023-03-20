@@ -1,2 +1,4 @@
-jimmy123 , Drake , March 1st , 8:00 pm ,  Rogers Center , 50
-johny456 , The Weekend , September 5th , 6:30 pm , Scotia Bank Arena , 125
+johny456 , BTS , December 9th , 12:00 pm , New York , 200
+jimmy123 , Drake , March 1st , 8:00 pm , Rogers Center , 50
+johny456 , The Weekend , March 10th , 2:45 pm , Vancouver , 115
+jimmy123 , BTS , May 5th , 7:00 pm , Scotia Bank Arena , 140
