@@ -30,8 +30,8 @@ class MainMenu:
         #GUI manager and text input fields
         manager = pygame_gui.UIManager((700,500))
         UI_REFRESH_RATE = pygame.time.Clock().tick(60)/5000  #sets the rate at which the GUI will refresh
-        self.usernameInput = pygame_gui.elements.UITextEntryLine(relative_rect = pygame.Rect((300, 125), (200, 35)), manager=manager, object_id = "#usernameInput")
-        self.passwordInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300, 200), (200, 35)), manager=manager, object_id="#passwordInput")
+        self.usernameInput = pygame_gui.elements.UITextEntryLine(relative_rect = pygame.Rect((300, 160), (200, 35)), manager=manager, object_id = "#usernameInput")
+        self.passwordInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300, 235), (200, 35)), manager=manager, object_id="#passwordInput")
         self.creditCardInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((250, 150), (200, 35)), manager=manager, object_id="#creditCardInput")
         self.loadMoneyInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((250, 225), (200, 35)), manager=manager, object_id="#loadMoneyInput")
         self.sellTicketInput = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((250, 200), (300, 35)), manager=manager, object_id="#sellTicketInput")
@@ -93,25 +93,25 @@ class MainMenu:
         self.creditCardInput.visible = False
         self.loadMoneyInput.visible = False
 
-        pygame.draw.rect(window, (215, 215, 225), (0, 0, 700, 100))    #draws upper background
-        pygame.draw.rect(window, (165, 215, 255), (0, 100, 700, 400))  #draws lower background
+        pygame.draw.rect(window, (50,93,161), (0, 0, 700, 100))    #draws upper background
+        pygame.draw.rect(window, (93,129,181), (0, 100, 700, 400))  #draws lower background
 
-        pygame.draw.rect(window, (100, 150, 200), (100, 25, 75, 50), 250, 3)  #draws "buy ticket" button
-        pygame.draw.rect(window, (100, 150, 200), (200, 25, 75, 50), 250, 3)  #draws "sell ticket" button
+        pygame.draw.rect(window, (255, 255, 204), (100, 25, 75, 50), 250, 3)  #draws "buy ticket" button
+        pygame.draw.rect(window, (255, 255, 204), (200, 25, 75, 50), 250, 3)  #draws "sell ticket" button
 
-        pygame.draw.rect(window, (100, 150, 200), (425, 25, 75, 50), 250, 3)  # draws "filter by price" button
-        pygame.draw.rect(window, (100, 150, 200), (525, 25, 75, 50), 250, 3)  # draws "filter by artist" button
+        pygame.draw.rect(window, (255, 255, 204), (425, 25, 75, 50), 250, 3)  # draws "filter by price" button
+        pygame.draw.rect(window, (255, 255, 204), (525, 25, 75, 50), 250, 3)  # draws "filter by artist" button
 
-        pygame.draw.rect(window, (50, 150, 50), (312.5, 25, 75, 50), 250, 3)  # draws "Account" button
+        pygame.draw.rect(window, (223,180,87), (312.5, 25, 75, 50), 250, 3)  # draws "Account" button
 
         font = pygame.font.Font('freesansbold.ttf', 10)
         slightlyBiggerFont = pygame.font.Font('freesansbold.ttf', 11)
 
-        buyTicketText = font.render("Buy Ticket", True,(255, 255, 255))  # all the following code is for the text
-        sellTicketText = font.render("Sell Ticket", True, (255, 255, 255))
-        filterByPriceText = font.render("Filter by Price", True, (255, 255, 255))
-        filterByArtistText = font.render("Filter by Artist", True, (255, 255, 255))
-        accountText = font.render("Account", True, (255, 255, 255))
+        buyTicketText = font.render("Buy Ticket", True,(100, 100, 100))  # all the following code is for the text
+        sellTicketText = font.render("Sell Ticket", True, (100, 100, 100))
+        filterByPriceText = font.render("Filter by Price", True, (100, 100, 100))
+        filterByArtistText = font.render("Filter by Artist", True, (100, 100, 100))
+        accountText = font.render("Account", True, (100, 100, 100))
 
         buyTicketTextRect = buyTicketText.get_rect()
         sellTicketTextRect = sellTicketText.get_rect()
@@ -136,17 +136,23 @@ class MainMenu:
             y = (self.filteredTickets.index(self.selectedTicket) * 70) + 125
             pygame.draw.rect(window, (255,255,0), (95,y-5,510,45))
 
+        mx, my = pygame.mouse.get_pos()
+
         x = 100
         y = 125
         for ticket in self.filteredTickets:   #draw box for each ticket
-            pygame.draw.rect(window, (200, 0, 75), (x, y, 500, 35))
+            pygame.draw.rect(window, (255,255,255), (x, y, 500, 35), 0, 3)
 
-            ticketText = slightlyBiggerFont.render(str(ticket), True, (255, 255, 255))
+            if mx > 100 and mx < 600:
+                if my > y and my < y + 35:
+                    pygame.draw.rect(window, (175,175,175), (x, y, 500, 35), 0, 3)
+            ticketText = slightlyBiggerFont.render(str(ticket), True, (100, 100, 100))
             ticketTextRect = ticketText.get_rect()
             ticketTextRect.center = (x + 250, y + 17)
             window.blit(ticketText, ticketTextRect)
 
             y += 70
+
 
         if self.errorMessage != None:
             self.drawError(window)
@@ -165,26 +171,36 @@ class MainMenu:
         pygame.draw.rect(window, (150, 50, 200), (425, 350, 130, 65), 250, 3)  # draws "Create Account" button
 
         font = pygame.font.Font('freesansbold.ttf', 15)
+        logoFont = pygame.font.SysFont('impact', 50)
+        logoFont2 = pygame.font.SysFont('vladimirscript', 50, italic=False)
 
         loginText = font.render("Login", True, (255, 255, 255))  #all the following code in this function is for the text
         createAccountText = font.render("Create Account", True, (255, 255, 255))
         usernameText = font.render("Username", True,(100, 100, 100))
         passwordText = font.render("Password", True, (100, 100, 100))
+        logoText = logoFont.render("TICKET", True, (102, 0, 102))
+        logoText2 = logoFont2.render("Mistress", True, (102, 0, 102))
 
         loginTextRect = loginText.get_rect()
         createAccountTextRect = createAccountText.get_rect()
         usernameTextRect = usernameText.get_rect()
         passwordTextRect = passwordText.get_rect()
+        logoTextRect = logoText.get_rect()
+        logoText2Rect = logoText2.get_rect()
 
         loginTextRect.center = (215, 382.5)
         createAccountTextRect.center = (490, 382.5)
-        usernameTextRect.center = (250, 140)
-        passwordTextRect.center = (250, 220)
+        usernameTextRect.center = (250, 175)
+        passwordTextRect.center = (250, 255)
+        logoTextRect.center = (280, 90)
+        logoText2Rect.center = (420, 90)
 
         window.blit(loginText, loginTextRect)
         window.blit(createAccountText, createAccountTextRect)
         window.blit(usernameText, usernameTextRect)
         window.blit(passwordText, passwordTextRect)
+        window.blit(logoText, logoTextRect)
+        window.blit(logoText2, logoText2Rect)
 
         if self.errorMessage != None:
             self.usernameInput.visible = 0
@@ -204,22 +220,23 @@ class MainMenu:
         self.creditCardInput.visible = True
         self.loadMoneyInput.visible = True
 
-        pygame.draw.rect(window, (200, 200, 200), (0, 0, 700, 500))  #draws background
+        pygame.draw.rect(window, (50, 93, 161), (0, 0, 700, 100))  # draws upper background
+        pygame.draw.rect(window, (93,129,181), (0, 100, 700, 400))  #draws lower background
 
-        pygame.draw.rect(window, (50, 150, 50), (300, 25, 100, 50), 250, 3)  #draws "main menu" button
+        pygame.draw.rect(window, (223,180,87), (300, 25, 100, 50), 250, 3)  #draws "main menu" button
 
-        pygame.draw.rect(window, (50, 150, 50), (460, 152.5, 75, 30))  # draws "confirm credit card" button
-        pygame.draw.rect(window, (50, 150, 50), (460, 227.5, 75, 30))  # draws "load money" button
+        pygame.draw.rect(window, (255, 255, 204), (460, 152.5, 75, 30))  # draws "confirm credit card" button
+        pygame.draw.rect(window, (255, 255, 204), (460, 227.5, 75, 30))  # draws "load money" button
 
 
         font = pygame.font.Font('freesansbold.ttf', 12)
 
-        mainMenuText = font.render("Main Menu", True, (255, 255, 255))
+        mainMenuText = font.render("Main Menu", True, (100,100,100))
         creditCardText = font.render("Credit Card:", True, (255, 255, 255))
         loadMoneyText = font.render("Load Money:", True, (255, 255, 255))
         myTicketsText = font.render("My Tickets:", True, (255, 255, 255))
-        creditCardButtonText = font.render("Confirm", True, (255, 255, 255))
-        loadMoneyButtonText = font.render("Load Money", True, (255, 255, 255))
+        creditCardButtonText = font.render("Confirm", True, (100,100,100))
+        loadMoneyButtonText = font.render("Load Money", True, (100,100,100))
         balanceText = font.render("Balance:", True, (255, 255, 255))
         amountText = font.render(str(self.currentUser.balance), True, (255, 255, 255))
 
@@ -255,9 +272,9 @@ class MainMenu:
         y = 300
 
         for ticket in self.currentUser.cart.items:  # draw box for each ticket
-            pygame.draw.rect(window, (200, 0, 75), (x, y, 500, 35))
+            pygame.draw.rect(window, (255,255,255), (x, y, 500, 35), 0, 3)
 
-            ticketText = font.render(str(ticket), True, (255, 255, 255))
+            ticketText = font.render(str(ticket), True, (100, 100, 100))
             ticketTextRect = ticketText.get_rect()
             ticketTextRect.center = (x + 250, y + 17)
             window.blit(ticketText, ticketTextRect)
@@ -404,22 +421,22 @@ class MainMenu:
 
         ticketString = self.sellTicketInput.get_text().split(',')
 
-        if (len(ticketString) != 6) or (not ticketString[5].isnumeric()):
+        if (len(ticketString) != 5) or (not ticketString[4].isnumeric()):
             self.errorMessage = "Invalid Ticket"
             self.sellTicketInput.clear()
             self.selectedTicket = None
             return
 
-        seller = ticketString[0]
-        artist = ticketString[1]
-        date = ticketString[2]
-        time = ticketString[3]
-        location = ticketString[4]
-        price = ticketString[5]
+        artist = ticketString[0]
+        date = ticketString[1]
+        time = ticketString[2]
+        location = ticketString[3]
+        price = ticketString[4]
 
-        ticket = Ticket.Ticket(seller, artist, date, time, location, int(price))
+        ticket = Ticket.Ticket(self.currentUser.username, artist, date, time, location, int(price))
 
         self.allTickets.append(ticket)
+        self.filteredTickets = self.allTickets
 
         self.updateTicketsFile()
 
